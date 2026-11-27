@@ -158,13 +158,19 @@ class ReportRepository(private val context: Context) {
         }.getOrNull()
     }
 
+    private fun InspectionReport.resolveAttachments(): InspectionReport {
+        fun resolve(path: String) = resolveReportAttachment(context.filesDir, id, path)
+        return copy(photos = photos.map { it.copy(filePath = resolve(it.filePath)) },
+            logoPath = resolve(logoPath), signatureImagePath = resolve(signatureImagePath))
+    }
+
     private fun reportsDirectory(): File =
         File(context.filesDir, "reports").apply { mkdirs() }
 
     fun listReports(): List<InspectionReport> =
         reportsDirectory().listFiles { it.extension == "json" }
             ?.mapNotNull { file ->
-                runCatching { json.decodeFromString(InspectionReport.serializer(), file.readAtomicText()) }.getOrNull()
+                runCatching { json.decodeFromString(InspectionReport.serializer(), file.readAtomicText()).resolveAttachments() }.getOrNull()
             }
             ?.sortedByDescending { it.createdAt }
             ?: emptyList()
