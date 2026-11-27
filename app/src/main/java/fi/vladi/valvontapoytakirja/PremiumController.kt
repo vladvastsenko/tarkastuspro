@@ -54,12 +54,12 @@ internal class PremiumController {
         error = false
         client.queryPurchases { result, purchases ->
             if (epoch != generation) return@queryPurchases
-            val purchase = purchases.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }.let { candidates ->
+            val purchase = purchases.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED && PREMIUM_PRODUCT in it.products }.let { candidates ->
                 candidates.firstOrNull { it.accountIdentifiers?.obfuscatedAccountId == account?.let(::premiumAccountHash) }
                     ?: candidates.singleOrNull()
             }
             if (result.responseCode != BillingClient.BillingResponseCode.OK || purchase == null) {
-                subscriptionState = if (result.responseCode != BillingClient.BillingResponseCode.OK) SubscriptionState.UNKNOWN else if (purchases.any { it.purchaseState == Purchase.PurchaseState.PENDING && it.accountIdentifiers?.obfuscatedAccountId == account?.let(::premiumAccountHash) }) SubscriptionState.PENDING else SubscriptionState.FREE
+                subscriptionState = if (result.responseCode != BillingClient.BillingResponseCode.OK) SubscriptionState.UNKNOWN else if (purchases.any { PREMIUM_PRODUCT in it.products && it.purchaseState == Purchase.PurchaseState.PENDING && it.accountIdentifiers?.obfuscatedAccountId == account?.let(::premiumAccountHash) }) SubscriptionState.PENDING else SubscriptionState.FREE
                 PremiumAccess.clear(); busy = false; active = false; error = result.responseCode != BillingClient.BillingResponseCode.OK; return@queryPurchases
             }
             if (purchase.isSuspended) { PremiumAccess.clear(); active = false; subscriptionState = SubscriptionState.UNKNOWN }
