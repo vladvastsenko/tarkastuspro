@@ -5,7 +5,7 @@ import kotlinx.serialization.json.*
 /** Rewrite only known attachment fields and only paths with an existing staged counterpart. */
 internal fun relocateBackupPaths(staging: File, destination: File) {
     val pathKeys = setOf("filePath","annotatedPath","logoPath","signatureImagePath")
-    val roots = setOf("settings","inspectors","tarkastus_reports","tarkastus_templates","custom_reports")
+    val roots = setOf("settings","inspectors","tarkastus_reports","tarkastus_templates","custom_reports","reports","templates")
     fun relocate(value: String): String {
         if (!value.startsWith("/")) return value
         val parts = value.split('/')

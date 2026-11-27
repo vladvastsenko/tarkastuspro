@@ -194,6 +194,7 @@ private fun UnifiedLauncher(onSignOut: () -> Unit, registrationCheckout: Boolean
         showPremium = false
         if (registrationCheckout && !premium.active) onCheckoutDeclined()
     }
+    var showValvonta by rememberSaveable { mutableStateOf(false) }
     var showLocalBackup by rememberSaveable { mutableStateOf(false) }
     val consent = remember(context) { if (BuildConfig.OFFLINE_PREVIEW) null else AdConsentManager(context as android.app.Activity) }
     LaunchedEffect(consent) { consent?.request() }
@@ -246,9 +247,12 @@ private fun UnifiedLauncher(onSignOut: () -> Unit, registrationCheckout: Boolean
             }
             if ((consent?.canRequestAds == true && !premium.active)) CloudAdMobBanner()
         }
+    } else if (showValvonta) {
+        ValvontaApp(onBackToLauncher = { showValvonta = false })
     } else {
         fi.vladi.tarkastuspoytakirja.TarkastusApp(
             onManagement = { showManagement = true },
+            onValvonta = { showValvonta = true },
             homeFooter = { if (consent?.canRequestAds == true && !premium.active) CloudAdMobBanner() }
         )
     }

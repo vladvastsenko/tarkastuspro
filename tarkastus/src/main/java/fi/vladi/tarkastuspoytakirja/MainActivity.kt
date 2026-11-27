@@ -117,7 +117,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TarkastusApp(onManagement: (() -> Unit)? = null, homeFooter: @Composable () -> Unit = {}) {
+fun TarkastusApp(onManagement: (() -> Unit)? = null, homeFooter: @Composable () -> Unit = {}, onValvonta: (() -> Unit)? = null) {
     val context = LocalContext.current
     val repository = remember { ReportRepository(context) }
     LaunchedEffect(repository) {
@@ -252,7 +252,8 @@ fun TarkastusApp(onManagement: (() -> Unit)? = null, homeFooter: @Composable () 
             },
             onBackToDocumentSelection = { (context as? Activity)?.finish() },
             onManagement = onManagement,
-            homeFooter = homeFooter
+            homeFooter = homeFooter,
+            onValvonta = onValvonta
         )
     } else {
         EditorScreen(
@@ -366,7 +367,8 @@ private fun HomeScreen(
     onDelete: (InspectionReport) -> Unit,
     onBackToDocumentSelection: () -> Unit,
     onManagement: (() -> Unit)? = null,
-    homeFooter: @Composable () -> Unit = {}
+    homeFooter: @Composable () -> Unit = {},
+    onValvonta: (() -> Unit)? = null
 ) {
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
@@ -374,7 +376,7 @@ private fun HomeScreen(
     ) {
         if (onManagement != null) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Tarkastus Cloud", Modifier.weight(1f), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+                Text("Tarkastus Pro", Modifier.weight(1f), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
                 TextButton(onClick = onManagement) { Text("⚙", style = MaterialTheme.typography.headlineMedium) }
             }
         } else {
@@ -389,6 +391,7 @@ private fun HomeScreen(
                 Text(stringResource(R.string.ui_new_report) + " ▾")
             }
             DropdownMenu(expanded = typeMenu, onDismissRequest = { typeMenu = false }) {
+                if (onValvonta != null) DropdownMenuItem(text = { Text("Valvontapöytäkirja") }, onClick = { typeMenu = false; onValvonta() })
                 ReportTypes.ids.forEach { type ->
                     DropdownMenuItem(text = { Text(ReportTypes.title(type, language)) }, onClick = {
                         typeMenu = false

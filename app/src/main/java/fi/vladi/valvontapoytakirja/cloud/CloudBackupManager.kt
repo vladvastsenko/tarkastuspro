@@ -31,13 +31,13 @@ object CloudBackupManager {
             ?: error("Valittua Google Drive -kansiota ei voi avata.")
         check(folder.isDirectory && folder.canRead()) { "Valitun Google Drive -kansion sisältöä ei voi lukea." }
         return folder.listFiles()
-            .filter { it.isFile && it.name?.startsWith("TarkastusCloud_backup_") == true && it.name?.endsWith(".zip") == true }
+            .filter { it.isFile && it.name?.startsWith("TarkastusPro_backup_") == true && it.name?.endsWith(".zip") == true }
             .map { BackupFile(it.uri, it.name.orEmpty(), it.length(), it.lastModified()) }
             .sortedByDescending { backupTimestamp(it.name) ?: it.lastModified }
     }
 
     private fun backupTimestamp(name: String): Long? {
-        val stamp = name.removePrefix("TarkastusCloud_backup_").removeSuffix(".zip")
+        val stamp = name.removePrefix("TarkastusPro_backup_").removeSuffix(".zip")
         return listOf("yyyyMMdd_HHmmss_SSS", "yyyyMMdd_HHmmss").firstNotNullOfOrNull { pattern ->
             runCatching { SimpleDateFormat(pattern, Locale.US).parse(stamp)?.time }.getOrNull()
         }
@@ -90,11 +90,11 @@ object CloudBackupManager {
             "Valittuun kansioon ei voi tallentaa."
         }
 
-        val tempZip = File(context.cacheDir, "tarkastuscloud_backup_${System.currentTimeMillis()}.zip")
+        val tempZip = File(context.cacheDir, "tarkastuspro_backup_${System.currentTimeMillis()}.zip")
         try {
             writeArchive(context, tempZip)
             fi.vladi.valvontapoytakirja.PremiumAccess.requireCloud()
-            val displayName = "TarkastusCloud_backup_${SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(Date())}.zip"
+            val displayName = "TarkastusPro_backup_${SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(Date())}.zip"
             check(folder.findFile(displayName) == null) { "Backup already exists" }
             val target = folder.createFile("application/zip", displayName)
                 ?: error("Varmuuskopiotiedostoa ei voitu luoda Google Driveen.")
@@ -116,7 +116,7 @@ object CloudBackupManager {
     private fun copyPdfExportsToDrive(context: Context, destinationRoot: DocumentFile): Int {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return 0
         val collection = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        val basePath = "${Environment.DIRECTORY_DOCUMENTS}/TarkastusCloud/"
+        val basePath = "${Environment.DIRECTORY_DOCUMENTS}/TarkastusPro/"
         val selection = "${MediaStore.MediaColumns.RELATIVE_PATH} LIKE ? AND ${MediaStore.MediaColumns.MIME_TYPE} = ?"
         val args = arrayOf("${basePath}Raportit/PDF/%", "application/pdf")
         var copied = 0

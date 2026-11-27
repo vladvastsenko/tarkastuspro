@@ -404,7 +404,7 @@ private fun HomeScreen(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text("Valvoja", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.report_valvonta), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
         Text(stringResource(R.string.loc3_waterproof_intro))
         TextButton(onClick = onBackToLauncher) { Text(stringResource(R.string.ui_back_reports)) }
         Button(onClick = onCreate, modifier = Modifier.fillMaxWidth()) {

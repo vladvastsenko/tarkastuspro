@@ -15,15 +15,15 @@ import java.util.Date
 import java.util.Locale
 
 /**
- * Two-way synchronization for PDFs exported to Documents/TarkastusCloud/Raportit/PDF.
+ * Two-way synchronization for PDFs exported to Documents/TarkastusPro/Raportit/PDF.
  * The Drive copy is stored in the selected Drive folder's top-level PDF directory.
  */
 internal object PdfArchiveSyncManager {
     private const val PREFS = "tarkastus_cloud_universal_sync"
     private const val BASELINE_KEY = "pdf_baseline_v1"
-    private const val DOCUMENTS_ROOT = "Documents/TarkastusCloud/"
+    private const val DOCUMENTS_ROOT = "Documents/TarkastusPro/"
     private const val PDF_DIRECTORY = "Raportit/PDF"
-    private const val REMOTE_FOLDER = "TarkastusCloud_PDF"
+    private const val REMOTE_FOLDER = "TarkastusPro_PDF"
 
     data class Result(
         val uploaded: Int = 0,
@@ -45,7 +45,7 @@ internal object PdfArchiveSyncManager {
             ?: selectedRoot.createDirectory(REMOTE_FOLDER)
             ?: error("PDF-synkronointikansiota ei voitu luoda Google Driveen.")
 
-        // One-time migration from the previous nested location TarkastusCloud_Sync/PDF.
+        // One-time migration from the previous nested location TarkastusPro_Sync/PDF.
         // Existing top-level PDFs remain authoritative if a same-path name already exists.
         migrateLegacyFolder(context, syncRoot.findFile(REMOTE_FOLDER), remoteRoot, conflictRoot)
 
@@ -323,7 +323,7 @@ internal object PdfArchiveSyncManager {
                 "application/pdf",
                 overwrite = true
             )
-            check(saved != null) { "PDF-tiedostoa ei voitu tallentaa kansioon Documents/TarkastusCloud: $path" }
+            check(saved != null) { "PDF-tiedostoa ei voitu tallentaa kansioon Documents/TarkastusPro: $path" }
         } finally {
             temporary.delete()
         }
