@@ -292,4 +292,5 @@
     <string name="delete_account_warning">Your Tarkastus Pro account will be permanently deleted. Local reports, settings and Google Drive files will remain. This cannot be undone.</string>
     <string name="delete_account_relogin">For security, sign out, sign in again and repeat account deletion.</string>
     <string name="delete_account_failed">Account deletion failed. Please try again.</string>
+
 </resources>

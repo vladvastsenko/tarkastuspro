@@ -292,4 +292,5 @@
     <string name="delete_account_warning">Sinu Tarkastus Proi konto kustutatakse jäädavalt. Kohalikud aruanded, seaded ja Google Drive’i failid säilivad. Seda ei saa tagasi võtta.</string>
     <string name="delete_account_relogin">Turvalisuse huvides logi välja ja uuesti sisse ning korda konto kustutamist.</string>
     <string name="delete_account_failed">Konto kustutamine ebaõnnestus. Proovi uuesti.</string>
+
 </resources>

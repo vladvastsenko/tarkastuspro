@@ -292,4 +292,5 @@
     <string name="cloud_private_backup_hint">Choisissez un dossier personnel non partagé avec les collègues. Les sauvegardes ne sont pas stockées dans le dossier partagé de l’entreprise.</string>
     <string name="cloud_private_backup_selected">Dossier de sauvegarde personnel sélectionné.</string>
     <string name="cloud_private_backup_invalid">Choisissez un dossier distinct accessible en écriture, pas le dossier partagé de l’entreprise.</string>
+
 </resources>

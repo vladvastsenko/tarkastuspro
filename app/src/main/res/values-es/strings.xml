@@ -292,4 +292,5 @@
     <string name="cloud_private_backup_hint">Elija una carpeta propia que no comparta con compañeros. Las copias no se guardan en la carpeta compartida de la empresa.</string>
     <string name="cloud_private_backup_selected">Carpeta de copia personal seleccionada.</string>
     <string name="cloud_private_backup_invalid">Elija una carpeta independiente con permiso de escritura, no la carpeta compartida de la empresa.</string>
+
 </resources>

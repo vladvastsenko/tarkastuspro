@@ -292,4 +292,5 @@
     <string name="cloud_private_backup_hint">Scegli una cartella personale non condivisa con i colleghi. I backup non vengono salvati nella cartella condivisa aziendale.</string>
     <string name="cloud_private_backup_selected">Cartella di backup personale selezionata.</string>
     <string name="cloud_private_backup_invalid">Scegli una cartella separata scrivibile, non la cartella condivisa aziendale.</string>
+
 </resources>

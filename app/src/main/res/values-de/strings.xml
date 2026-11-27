@@ -292,4 +292,5 @@
     <string name="cloud_private_backup_hint">Wählen Sie einen eigenen Ordner, der nicht mit Kollegen geteilt wird. Sicherungen werden nicht im freigegebenen Firmenordner gespeichert.</string>
     <string name="cloud_private_backup_selected">Persönlicher Sicherungsordner ausgewählt.</string>
     <string name="cloud_private_backup_invalid">Wählen Sie einen separaten beschreibbaren Ordner, nicht den freigegebenen Firmenordner.</string>
+
 </resources>
