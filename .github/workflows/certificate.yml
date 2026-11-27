@@ -1,0 +1,28 @@
+name: Tarkastus Pro certificate fingerprints
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fingerprints:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Print public certificate fingerprints
+        env:
+          PRO_KEYSTORE_B64: ${{ secrets.PRO_KEYSTORE_B64 }}
+          PRO_KEYSTORE_PASSWORD: ${{ secrets.PRO_KEYSTORE_PASSWORD }}
+          PRO_KEY_ALIAS: ${{ secrets.PRO_KEY_ALIAS }}
+        run: |
+          set -euo pipefail
+          test -n "$PRO_KEYSTORE_B64" || { echo "::error::Missing PRO_KEYSTORE_B64"; exit 1; }
+          test -n "$PRO_KEYSTORE_PASSWORD"
+          test -n "$PRO_KEY_ALIAS"
+          umask 077
+          key="$(mktemp)"
+          trap 'rm -f "$key"' EXIT
+          printf '%s' "$PRO_KEYSTORE_B64" | tr -d '[:space:]' | base64 --decode > "$key"
+          keytool -list -v -keystore "$key" -storepass:env PRO_KEYSTORE_PASSWORD -alias "$PRO_KEY_ALIAS" | grep -E 'SHA1:|SHA256:'
