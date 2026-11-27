@@ -45,7 +45,7 @@ class ReportRepository(private val context: Context) {
         File(context.filesDir, "inspectors").apply { mkdirs() }
 
     fun listInspectors(): List<InspectorProfile> =
-        inspectorsDirectory().listFiles { it.extension == "json" }
+        inspectorsDirectory().atomicJsonFiles()
             ?.mapNotNull { file ->
                 runCatching { json.decodeFromString(InspectorProfile.serializer(), file.readAtomicText()) }.getOrNull()
             }
@@ -65,14 +65,14 @@ class ReportRepository(private val context: Context) {
 
     fun deleteInspector(inspectorId: String) {
         require(inspectorId.matches(Regex("[a-zA-Z0-9-]{1,64}")))
-        File(inspectorsDirectory(), "${inspectorId}.json").delete()
+        android.util.AtomicFile(File(inspectorsDirectory(), "${inspectorId}.json")).delete()
     }
 
     private fun customersDirectory(): File =
         File(context.filesDir, "customers").apply { mkdirs() }
 
     fun listCustomers(): List<CustomerProfile> =
-        customersDirectory().listFiles { it.extension == "json" }
+        customersDirectory().atomicJsonFiles()
             ?.mapNotNull { file ->
                 runCatching { json.decodeFromString(CustomerProfile.serializer(), file.readAtomicText()) }.getOrNull()
             }
@@ -88,7 +88,7 @@ class ReportRepository(private val context: Context) {
 
     fun deleteCustomer(customerId: String) {
         requireSafeId(customerId)
-        File(customersDirectory(), "${customerId}.json").delete()
+        android.util.AtomicFile(File(customersDirectory(), "${customerId}.json")).delete()
         listSites().filter { it.customerId == customerId }.forEach { deleteSite(it.id) }
     }
 
@@ -96,7 +96,7 @@ class ReportRepository(private val context: Context) {
         File(context.filesDir, "customer_sites").apply { mkdirs() }
 
     fun listSites(customerId: String? = null): List<CustomerSite> =
-        sitesDirectory().listFiles { it.extension == "json" }
+        sitesDirectory().atomicJsonFiles()
             ?.mapNotNull { file ->
                 runCatching { json.decodeFromString(CustomerSite.serializer(), file.readAtomicText()) }.getOrNull()
             }
@@ -113,7 +113,7 @@ class ReportRepository(private val context: Context) {
 
     fun deleteSite(siteId: String) {
         requireSafeId(siteId)
-        File(sitesDirectory(), "${siteId}.json").delete()
+        android.util.AtomicFile(File(sitesDirectory(), "${siteId}.json")).delete()
     }
 
     fun importInspectorSignature(inspectorId: String, uri: Uri): File? = runCatching {
@@ -168,7 +168,7 @@ class ReportRepository(private val context: Context) {
         File(context.filesDir, "reports").apply { mkdirs() }
 
     fun listReports(): List<InspectionReport> =
-        reportsDirectory().listFiles { it.extension == "json" }
+        reportsDirectory().atomicJsonFiles()
             ?.mapNotNull { file ->
                 runCatching { json.decodeFromString(InspectionReport.serializer(), file.readAtomicText()).resolveAttachments() }.getOrNull()
             }
@@ -179,7 +179,7 @@ class ReportRepository(private val context: Context) {
         File(context.filesDir, "templates").apply { mkdirs() }
 
     fun listTemplates(): List<InspectionReport> =
-        templatesDirectory().listFiles { it.extension == "json" }
+        templatesDirectory().atomicJsonFiles()
             ?.mapNotNull { file ->
                 runCatching { json.decodeFromString(InspectionReport.serializer(), file.readAtomicText()) }.getOrNull()
             }
@@ -200,7 +200,7 @@ class ReportRepository(private val context: Context) {
     }
     fun deleteReport(reportId: String) {
         requireSafeId(reportId)
-        File(reportsDirectory(), "$reportId.json").delete()
+        android.util.AtomicFile(File(reportsDirectory(), "$reportId.json")).delete()
         File(reportsDirectory(), reportId).deleteRecursively()
     }
 
@@ -355,3 +355,7 @@ private fun File.writeAtomicBytes(write: (java.io.OutputStream) -> Unit) {
         throw error
     }
 }
+
+private fun File.atomicJsonFiles(): List<File> = listFiles().orEmpty()
+    .filter { it.isFile && (it.name.endsWith(".json") || it.name.endsWith(".json.bak")) }
+    .map { File(this, it.name.removeSuffix(".bak")) }.distinctBy { it.name }
