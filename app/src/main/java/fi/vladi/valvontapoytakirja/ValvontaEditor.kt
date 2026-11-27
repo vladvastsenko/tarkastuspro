@@ -245,15 +245,27 @@ internal fun ValvontaApp(
         if (createImmediately && currentReport == null) saveReport(applySettingsSnapshot(InspectionReport(workStartDate = LocalDate.now().toString())))
     }
     val active = currentReport
-    androidx.activity.compose.BackHandler {
-        if (currentReport == null) onBackToLauncher() else coroutineScope.launch {
-            pendingGalleryJob?.join()
-            pendingSaveJob?.cancel()
-            pendingSaveJob?.join()
-            val latest = currentReport ?: return@launch
-            reports = withContext(Dispatchers.IO) { repository.save(latest); repository.listReports() }
-            currentReport = null
+    fun closeReport() {
+        coroutineScope.launch {
+            try {
+                pendingGalleryJob?.join()
+                pendingSaveJob?.cancel()
+                pendingSaveJob?.join()
+                val latest = currentReport ?: return@launch
+                reports = withContext(Dispatchers.IO) {
+                    repository.save(latest)
+                    repository.listReports()
+                }
+                currentReport = null
+            } catch (cancelled: kotlinx.coroutines.CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                android.widget.Toast.makeText(context, error.localizedMessage ?: "Unable to save report", android.widget.Toast.LENGTH_LONG).show()
+            }
         }
+    }
+    androidx.activity.compose.BackHandler {
+        if (currentReport == null) onBackToLauncher() else closeReport()
     }
     if (active == null && showSettings) {
         SettingsScreen(
@@ -334,20 +346,7 @@ internal fun ValvontaApp(
             customers = customers,
             sites = sites,
             onChange = ::saveReport,
-            onBack = {
-                coroutineScope.launch {
-                    pendingGalleryJob?.join()
-                    pendingSaveJob?.cancel()
-                    pendingSaveJob?.join()
-                    val latest = currentReport ?: active
-                    val latestReports = withContext(Dispatchers.IO) {
-                        repository.save(latest)
-                        repository.listReports()
-                    }
-                    reports = latestReports
-                    currentReport = null
-                }
-            },
+            onBack = ::closeReport,
             onCamera = {
                 val file = repository.createCameraPhotoFile(active.id)
                 pendingCameraFile = file
