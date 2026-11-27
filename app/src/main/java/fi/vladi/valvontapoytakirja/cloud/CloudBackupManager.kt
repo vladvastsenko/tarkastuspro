@@ -42,8 +42,8 @@ object CloudBackupManager {
             runCatching { SimpleDateFormat(pattern, Locale.US).parse(stamp)?.time }.getOrNull()
         }
     }
-    private const val MANIFEST = "TARKASTUSCLOUD_BACKUP_INFO.txt"
-    private const val MANIFEST_CONTENT = "TARKASTUSCLOUD_BACKUP_V1"
+    private const val MANIFEST = "TARKASTUSPRO_BACKUP_INFO.txt"
+    private const val MANIFEST_CONTENT = "TARKASTUSPRO_BACKUP_V1"
     private const val MAX_ENTRIES = 20_000
     private const val MAX_UNPACKED_BYTES = 2L * 1024L * 1024L * 1024L
 

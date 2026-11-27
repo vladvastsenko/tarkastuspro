@@ -11,7 +11,7 @@ class BackupExtractionTest {
         ZipOutputStream(bytes).use { z -> entries.forEach { (name,value) -> z.putNextEntry(ZipEntry(name)); z.write(value.toByteArray()); z.closeEntry() } }
         return bytes.toByteArray()
     }
-    private val manifest = "TARKASTUSCLOUD_BACKUP_INFO.txt" to "TARKASTUSCLOUD_BACKUP_V1"
+    private val manifest = "TARKASTUSPRO_BACKUP_INFO.txt" to "TARKASTUSPRO_BACKUP_V1"
     @Test fun validArchive() {
         val root = folder.newFolder()
         extractBackup(archive(manifest,"files/report.json" to "saved").inputStream(),root)

@@ -3,8 +3,8 @@ import java.io.*
 import java.util.zip.*
 internal fun writeBackupArchive(root: File, tempZip: File, maxEntries: Int = 20000, maxBytes: Long = 2L * 1024 * 1024 * 1024) {
             ZipOutputStream(BufferedOutputStream(FileOutputStream(tempZip))).use { zip ->
-                zip.putNextEntry(ZipEntry("TARKASTUSCLOUD_BACKUP_INFO.txt"))
-                zip.write(("TARKASTUSCLOUD_BACKUP_V1" + "\n").toByteArray(Charsets.UTF_8))
+                zip.putNextEntry(ZipEntry("TARKASTUSPRO_BACKUP_INFO.txt"))
+                zip.write(("TARKASTUSPRO_BACKUP_V1" + "\n").toByteArray(Charsets.UTF_8))
                 zip.closeEntry()
 
                 var entries = 1

@@ -29,7 +29,7 @@ internal fun extractBackup(input: InputStream, staging: File, maxEntries: Int = 
                 val entry = entries.nextElement()
                 val name = entry.name.replace('\\', '/')
                 require(seen.add(name) && !entry.isDirectory && name.split('/').none { it.isBlank() || it == "." || it == ".." })
-                val marker = name == "TARKASTUSCLOUD_BACKUP_INFO.txt"
+                val marker = name == "TARKASTUSPRO_BACKUP_INFO.txt"
                 require(marker || name.startsWith("files/"))
                 val target = File(staging, name.removePrefix("files/")).canonicalFile
                 require(target.path.startsWith(staging.canonicalPath + File.separator))
@@ -58,7 +58,7 @@ internal fun extractBackup(input: InputStream, staging: File, maxEntries: Int = 
                 }
                 require(size == entry.size && crc.value == entry.crc) { "ZIP checksum mismatch" }
                 if (marker) {
-                    require(bytes.toString("UTF-8").trim() == "TARKASTUSCLOUD_BACKUP_V1")
+                    require(bytes.toString("UTF-8").trim() == "TARKASTUSPRO_BACKUP_V1")
                     manifest = true
                 }
             }

@@ -8,7 +8,7 @@ class BackupIntegrityTest {
     private fun archive(path: String = "files/photo.image"): ByteArray {
         val bytes = ByteArrayOutputStream()
         ZipOutputStream(bytes).use { zip ->
-            for ((name, data) in listOf("TARKASTUSCLOUD_BACKUP_INFO.txt" to "TARKASTUSCLOUD_BACKUP_V1".toByteArray(), path to byteArrayOf(1,2,3,4))) {
+            for ((name, data) in listOf("TARKASTUSPRO_BACKUP_INFO.txt" to "TARKASTUSPRO_BACKUP_V1".toByteArray(), path to byteArrayOf(1,2,3,4))) {
                 zip.putNextEntry(ZipEntry(name)); zip.write(data); zip.closeEntry()
             }
         }
