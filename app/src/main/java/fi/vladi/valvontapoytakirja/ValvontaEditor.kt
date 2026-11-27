@@ -161,12 +161,18 @@ internal fun ValvontaApp(
         if (isNewReport) reports = listOf(report) + reports.filterNot { it.id == report.id }
         pendingSaveJob?.cancel()
         pendingSaveJob = coroutineScope.launch {
-            delay(350)
-            val latestReports = withContext(Dispatchers.IO) {
-                repository.save(report)
-                repository.listReports()
+            if (!isNewReport) delay(350)
+            try {
+                val latestReports = withContext(Dispatchers.IO) {
+                    repository.save(report)
+                    repository.listReports()
+                }
+                reports = latestReports
+            } catch (cancelled: kotlinx.coroutines.CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                android.widget.Toast.makeText(context, error.localizedMessage ?: "Unable to save report", android.widget.Toast.LENGTH_LONG).show()
             }
-            reports = latestReports
         }
     }
 

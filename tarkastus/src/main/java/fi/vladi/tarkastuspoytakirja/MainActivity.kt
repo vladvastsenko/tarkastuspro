@@ -386,12 +386,16 @@ private fun HomeScreen(
         }
         var typeMenu by remember { mutableStateOf(false) }
         val language = AppLanguage.selected(LocalContext.current)
+        if (onValvonta != null) {
+            Button(onClick = onValvonta, modifier = Modifier.fillMaxWidth()) {
+                Text(ReportTypes.title("waterproofing", language))
+            }
+        }
         Box {
             Button(onClick = { typeMenu = true }, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.ui_new_report) + " ▾")
             }
             DropdownMenu(expanded = typeMenu, onDismissRequest = { typeMenu = false }) {
-                if (onValvonta != null) DropdownMenuItem(text = { Text(ReportTypes.title("waterproofing", language)) }, onClick = { typeMenu = false; onValvonta() })
                 ReportTypes.ids.forEach { type ->
                     DropdownMenuItem(text = { Text(ReportTypes.title(type, language)) }, onClick = {
                         typeMenu = false
