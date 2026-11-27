@@ -37,7 +37,7 @@ object CloudSyncManager {
                 parts.last().endsWith(".json")
             "reports", "tarkastus_reports" ->
                 (parts.size == 2 && parts.last().endsWith(".json")) ||
-                (parts.size == 4 && parts[2] == "photos" &&
+                (parts.size == 4 && (parts[2] == "photos" || (parts.first() == "reports" && parts[2] == "attachments")) &&
                     parts.last().substringAfterLast('.', "").lowercase() in
                     setOf("jpg", "jpeg", "png", "webp")) ||
                 (parts.size == 3 &&
