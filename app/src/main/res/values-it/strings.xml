@@ -250,7 +250,7 @@
     <string name="loc4_other_product">Altro prodotto / prodotto personalizzato</string>
     <string name="loc4_family_hint">Scegli un produttore per tutto il sistema: primer, membrana, collare di scarico, nastri di rinforzo, sigillanti e adesivo per piastrelle.</string>
     <string name="loc4_family_missing">Nessun prodotto di questo produttore nella categoria. Scegli solo prodotti dello stesso sistema.</string>
-    <string name="loc4_local_save_valvoja">Valvoja 0.4.7 • I dati sono salvati su questo telefono.</string>
+    <string name="loc4_local_save_valvoja">Tarkastus Pro • I dati sono salvati su questo telefono.</string>
     <string name="loc4_result_prefix">Esito: %1$s</string>
     <string name="loc4_photo_count">Foto: %1$d</string>
     <string name="ui_not_selected">Non selezionato</string>

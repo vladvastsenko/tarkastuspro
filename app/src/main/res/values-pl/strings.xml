@@ -250,7 +250,7 @@
     <string name="loc4_other_product">Inny / własny produkt</string>
     <string name="loc4_family_hint">Wybierz jednego producenta całego systemu: grunt, membrana, kołnierz odpływu, taśmy wzmacniające, uszczelnienia i klej do płytek.</string>
     <string name="loc4_family_missing">Brak produktu tego producenta w tej kategorii. Wybieraj tylko produkty tego samego systemu.</string>
-    <string name="loc4_local_save_valvoja">Valvoja 0.4.7 • Dane są zapisywane na tym telefonie.</string>
+    <string name="loc4_local_save_valvoja">Tarkastus Pro • Dane są zapisywane na tym telefonie.</string>
     <string name="loc4_result_prefix">Wynik: %1$s</string>
     <string name="loc4_photo_count">Zdjęcia: %1$d</string>
     <string name="ui_not_selected">Nie wybrano</string>

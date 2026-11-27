@@ -250,7 +250,7 @@
     <string name="loc4_other_product">Otro producto / producto personalizado</string>
     <string name="loc4_family_hint">Elija un fabricante para todo el sistema: imprimación, membrana, collarín de desagüe, cintas de refuerzo, sellos y adhesivo para baldosas.</string>
     <string name="loc4_family_missing">No hay productos de este fabricante en esta categoría. Elija solo productos del mismo sistema.</string>
-    <string name="loc4_local_save_valvoja">Valvoja 0.4.7 • Los datos se guardan en este teléfono.</string>
+    <string name="loc4_local_save_valvoja">Tarkastus Pro • Los datos se guardan en este teléfono.</string>
     <string name="loc4_result_prefix">Resultado: %1$s</string>
     <string name="loc4_photo_count">Fotos: %1$d</string>
     <string name="ui_not_selected">Sin seleccionar</string>

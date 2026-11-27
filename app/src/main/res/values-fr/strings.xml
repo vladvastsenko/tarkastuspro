@@ -250,7 +250,7 @@
     <string name="loc4_other_product">Autre produit / produit personnalisé</string>
     <string name="loc4_family_hint">Choisissez un seul fabricant pour tout le système : primaire, membrane, collerette, bandes de renfort, joints et colle à carrelage.</string>
     <string name="loc4_family_missing">Aucun produit de ce fabricant dans cette catégorie. Choisissez uniquement des produits du même système.</string>
-    <string name="loc4_local_save_valvoja">Valvoja 0.4.7 • Données enregistrées sur ce téléphone.</string>
+    <string name="loc4_local_save_valvoja">Tarkastus Pro • Données enregistrées sur ce téléphone.</string>
     <string name="loc4_result_prefix">Résultat : %1$s</string>
     <string name="loc4_photo_count">Photos : %1$d</string>
     <string name="ui_not_selected">Non sélectionné</string>

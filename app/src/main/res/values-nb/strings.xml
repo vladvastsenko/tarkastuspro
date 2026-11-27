@@ -106,7 +106,7 @@
     <string name="loc4_family_hint">Velg én produsent for hele membransystemet: primer, membran, slukmansjett, armeringsbånd, tetting og flislim.</string>
     <string name="loc4_family_missing">Ingen produkter fra denne produsenten i kategorien. Velg produkter fra samme system.</string>
     <string name="loc4_image_failed">Kunne ikke vise bildet: %1$s</string>
-    <string name="loc4_local_save_valvoja">Valvoja 0.4.7 • Data lagres på denne telefonen.</string>
+    <string name="loc4_local_save_valvoja">Tarkastus Pro • Data lagres på denne telefonen.</string>
     <string name="loc4_inspection_date_prefix">Kontrolldato: %1$s</string>
     <string name="loc4_result_prefix">Resultat: %1$s</string>
     <string name="loc4_photo_count">Bilder: %1$d</string>

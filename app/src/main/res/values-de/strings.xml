@@ -250,7 +250,7 @@
     <string name="loc4_other_product">Anderes / eigenes Produkt</string>
     <string name="loc4_family_hint">Wählen Sie einen Hersteller für das gesamte Abdichtungssystem: Grundierung, Membran, Ablaufmanschette, Verstärkungsbänder, Dichtstoffe und Fliesenkleber.</string>
     <string name="loc4_family_missing">Kein Produkt dieses Herstellers in dieser Kategorie verfügbar. Wählen Sie nur Produkte desselben Systems.</string>
-    <string name="loc4_local_save_valvoja">Valvoja 0.4.7 • Daten werden auf diesem Gerät gespeichert.</string>
+    <string name="loc4_local_save_valvoja">Tarkastus Pro • Daten werden auf diesem Gerät gespeichert.</string>
     <string name="loc4_result_prefix">Ergebnis: %1$s</string>
     <string name="loc4_photo_count">Fotos: %1$d</string>
     <string name="ui_not_selected">Nicht ausgewählt</string>

@@ -106,7 +106,7 @@
     <string name="loc4_family_hint">Visai hidroizolācijas sistēmai izvēlieties vienu ražotāju: grunti, hidroizolāciju, trapa manšeti, armēšanas lentes, hermētiķus un flīžu līmi.</string>
     <string name="loc4_family_missing">Šī ražotāja produkts šajā kategorijā nav pieejams. Izvēlieties vienas sistēmas produktus.</string>
     <string name="loc4_image_failed">Neizdevās parādīt fotoattēlu: %1$s</string>
-    <string name="loc4_local_save_valvoja">Valvoja 0.4.7 • Dati tiek saglabāti tālrunī.</string>
+    <string name="loc4_local_save_valvoja">Tarkastus Pro • Dati tiek saglabāti tālrunī.</string>
     <string name="loc4_inspection_date_prefix">Pārbaudes datums: %1$s</string>
     <string name="loc4_result_prefix">Rezultāts: %1$s</string>
     <string name="loc4_photo_count">Fotoattēli: %1$d</string>
