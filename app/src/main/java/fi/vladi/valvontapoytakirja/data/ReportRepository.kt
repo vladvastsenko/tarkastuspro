@@ -161,7 +161,7 @@ class ReportRepository(private val context: Context) {
     private fun InspectionReport.resolveAttachments(): InspectionReport {
         fun resolve(path: String) = resolveReportAttachment(context.filesDir, id, path)
         return copy(photos = photos.map { it.copy(filePath = resolve(it.filePath)) },
-            logoPath = resolve(logoPath), signatureImagePath = resolve(signatureImagePath))
+            logoPath = resolveReportAttachment(context.filesDir, id, logoPath, true), signatureImagePath = resolveReportAttachment(context.filesDir, id, signatureImagePath, true))
     }
 
     private fun reportsDirectory(): File =
@@ -219,15 +219,17 @@ class ReportRepository(private val context: Context) {
     private fun portableAttachment(id: String, path: String, kind: String): String {
         if (path.isBlank()) return path
         val prefix = "reports/$id/"
-        val resolved = resolveReportAttachment(context.filesDir, id, path)
+        val resolved = resolveReportAttachment(context.filesDir, id, path, kind != "photo")
+        if (resolved.isBlank()) return ""
+        if (!File(resolved).isAbsolute) return resolved
         val source = File(resolved).canonicalFile
         val root = context.filesDir.canonicalFile
         val own = File(root, prefix).canonicalFile
         if (source.isFile && source.path.startsWith(own.path + File.separator))
             return source.relativeTo(root).invariantSeparatorsPath
-        if (!source.isFile || !source.path.startsWith(root.path + File.separator)) return path
+        if (!source.isFile || !source.path.startsWith(root.path + File.separator)) return ""
         val relative = source.relativeTo(root).invariantSeparatorsPath
-        if (relative.substringBefore('/') !in setOf("settings", "inspectors")) return path
+        if (relative.substringBefore('/') !in setOf("settings", "inspectors")) return ""
         val digest = java.security.MessageDigest.getInstance("SHA-256")
         source.inputStream().use { input ->
             val buffer = ByteArray(8192)
@@ -238,7 +240,7 @@ class ReportRepository(private val context: Context) {
             }
         }
         val hash = digest.digest().joinToString("") { "%02x".format(it) }
-        val extension = source.extension.lowercase().takeIf { it in setOf("png", "jpg", "jpeg", "webp") } ?: "img"
+        val extension = source.extension.lowercase().takeIf { it in setOf("png", "jpg", "jpeg", "webp") } ?: return ""
         val target = File(own, "attachments/${kind}_$hash.$extension")
         target.parentFile?.mkdirs()
         if (!target.isFile) source.inputStream().use { input ->

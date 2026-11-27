@@ -2,17 +2,21 @@ package fi.vladi.valvontapoytakirja.data
 
 import java.io.File
 
-/** Resolve only attachments belonging to this report, without rewriting shared JSON on read. */
-internal fun resolveReportAttachment(root: File, reportId: String, value: String): String {
-    if (value.isBlank() || !reportId.matches(Regex("[a-zA-Z0-9_-]{1,128}"))) return value
-    val prefix = "reports/$reportId/"
+/** Resolve portable image paths without trusting paths outside the app's attachment roots. */
+internal fun resolveReportAttachment(root: File, reportId: String, value: String, allowSettings: Boolean = false): String {
+    if (value.isBlank() || !reportId.matches(Regex("[a-zA-Z0-9_-]{1,128}"))) return ""
+    val base = root.canonicalFile
     val relative = when {
-        value.startsWith(prefix) -> value
-        value.contains("/files/$prefix") -> prefix + value.substringAfter("/files/$prefix")
-        else -> return value
+        value.startsWith(base.path + File.separator) -> value.removePrefix(base.path + File.separator)
+        value.startsWith("/") && value.contains("/files/") -> value.substringAfterLast("/files/")
+        else -> value
     }
-    if (relative.split('/').any { it.isBlank() || it == "." || it == ".." }) return value
-    val directory = File(root, "reports/$reportId").canonicalFile
-    val candidate = File(root, relative).canonicalFile
-    return if (candidate.path.startsWith(directory.path + File.separator) && candidate.isFile) candidate.path else value
+    if (relative.split('/').any { it.isBlank() || it == "." || it == ".." || it.contains('\\') }) return ""
+    val allowed = listOf("reports/$reportId/") + if (allowSettings) listOf("settings/", "inspectors/") else emptyList()
+    val prefix = allowed.firstOrNull { relative.startsWith(it) } ?: return ""
+    if (File(relative).extension.lowercase() !in setOf("png", "jpg", "jpeg", "webp")) return ""
+    val directory = File(base, prefix).canonicalFile
+    val candidate = File(base, relative).canonicalFile
+    if (!directory.path.startsWith(base.path + File.separator) || !candidate.path.startsWith(directory.path + File.separator)) return ""
+    return if (candidate.isFile) candidate.path else relative
 }
