@@ -93,6 +93,34 @@ internal class PdfLabels(private val language: String) {
         "Kuivakalvo" to listOf("Сухая плёнка", "Dry film", "Torrfilm", "Kuiv kiht", "Sausa plėvelė", "Sausā plēve", "Tørrfilm", "Tørfilm")
     )
     private val extra = mapOf(
+        "Seinät – valmistajan vaatima menekki (kg/m² tai l/m²)" to listOf("Murs – consommation exigée par le fabricant (kg/m² ou l/m²)", "Paredes – consumo exigido por el fabricante (kg/m² o l/m²)", "Pareti – consumo richiesto dal produttore (kg/m² o l/m²)", "Wände – Herstellervorgabe zum Verbrauch (kg/m² oder l/m²)", "Ściany – zużycie wymagane przez producenta (kg/m² lub l/m²)"),
+        "Seinät – käytetty kokonaismäärä (kg tai l)" to listOf("Murs – quantité totale utilisée (kg ou l)", "Paredes – cantidad total utilizada (kg o l)", "Pareti – quantità totale utilizzata (kg o l)", "Wände – verwendete Gesamtmenge (kg oder l)", "Ściany – całkowita zużyta ilość (kg lub l)"),
+        "Lattia – valmistajan vaatima menekki (kg/m² tai l/m²)" to listOf("Sol – consommation exigée par le fabricant (kg/m² ou l/m²)", "Suelo – consumo exigido por el fabricante (kg/m² o l/m²)", "Pavimento – consumo richiesto dal produttore (kg/m² o l/m²)", "Boden – Herstellervorgabe zum Verbrauch (kg/m² oder l/m²)", "Podłoga – zużycie wymagane przez producenta (kg/m² lub l/m²)"),
+        "Lattia – käytetty kokonaismäärä (kg tai l)" to listOf("Sol – quantité totale utilisée (kg ou l)", "Suelo – cantidad total utilizada (kg o l)", "Pavimento – quantità totale utilizzata (kg o l)", "Boden – verwendete Gesamtmenge (kg oder l)", "Podłoga – całkowita zużyta ilość (kg lub l)"),
+        "Seinät – mitattu kuivakalvon paksuus (mm)" to listOf("Murs – épaisseur sèche mesurée (mm)", "Paredes – espesor seco medido (mm)", "Pareti – spessore secco misurato (mm)", "Wände – gemessene Trockenschichtdicke (mm)", "Ściany – zmierzona grubość suchej warstwy (mm)"),
+        "Seinät – valmistajan vaatima kuivakalvon vähimmäispaksuus (mm)" to listOf("Murs – épaisseur sèche minimale exigée (mm)", "Paredes – espesor seco mínimo exigido (mm)", "Pareti – spessore secco minimo richiesto (mm)", "Wände – Mindesttrockenschichtdicke laut Hersteller (mm)", "Ściany – minimalna grubość suchej warstwy wg producenta (mm)"),
+        "Lattia – mitattu kuivakalvon paksuus (mm)" to listOf("Sol – épaisseur sèche mesurée (mm)", "Suelo – espesor seco medido (mm)", "Pavimento – spessore secco misurato (mm)", "Boden – gemessene Trockenschichtdicke (mm)", "Podłoga – zmierzona grubość suchej warstwy (mm)"),
+        "Lattia – valmistajan vaatima kuivakalvon vähimmäispaksuus (mm)" to listOf("Sol – épaisseur sèche minimale exigée (mm)", "Suelo – espesor seco mínimo exigido (mm)", "Pavimento – spessore secco minimo richiesto (mm)", "Boden – Mindesttrockenschichtdicke laut Hersteller (mm)", "Podłoga – minimalna grubość suchej warstwy wg producenta (mm)"),
+        "TARKASTUKSEN TARKOITUS JA LAAJUUS" to listOf("OBJET ET PORTÉE DU CONTRÔLE", "OBJETO Y ALCANCE DE LA INSPECCIÓN", "SCOPO E AMBITO DEL CONTROLLO", "ZWECK UND UMFANG DER PRÜFUNG", "CEL I ZAKRES KONTROLI"),
+        "Tarkastuksen tarkoitus ja laajuus" to listOf("Objet et portée du contrôle", "Objeto y alcance de la inspección", "Scopo e ambito del controllo", "Zweck und Umfang der Prüfung", "Cel i zakres kontroli"),
+        "YLEISET HUOMIOT" to listOf("OBSERVATIONS GÉNÉRALES", "OBSERVACIONES GENERALES", "OSSERVAZIONI GENERALI", "ALLGEMEINE HINWEISE", "UWAGI OGÓLNE"),
+        "Yleiset huomiot" to listOf("Observations générales", "Observaciones generales", "Osservazioni generali", "Allgemeine Hinweise", "Uwagi ogólne"),
+        "TARKASTUSKOHTEET" to listOf("POINTS DE CONTRÔLE", "PUNTOS DE INSPECCIÓN", "PUNTI DI CONTROLLO", "PRÜFPUNKTE", "PUNKTY KONTROLI"),
+        "YHTEENVETO" to listOf("SYNTHÈSE", "RESUMEN", "RIEPILOGO", "ZUSAMMENFASSUNG", "PODSUMOWANIE"),
+        "Johtopäätökset ja tarvittavat toimenpiteet" to listOf("Conclusions et mesures nécessaires", "Conclusiones y medidas necesarias", "Conclusioni e interventi necessari", "Schlussfolgerungen und erforderliche Maßnahmen", "Wnioski i niezbędne działania"),
+        "Tila / sijainti" to listOf("Local / emplacement", "Espacio / ubicación", "Locale / posizione", "Raum / Lage", "Pomieszczenie / lokalizacja"),
+        "Kuvaus / tilanne" to listOf("Description / situation", "Descripción / situación", "Descrizione / situazione", "Beschreibung / Zustand", "Opis / stan"),
+        "Toimenpiteet / lisätiedot" to listOf("Mesures / informations complémentaires", "Medidas / información adicional", "Interventi / informazioni aggiuntive", "Maßnahmen / Zusatzinformationen", "Działania / dodatkowe informacje"),
+        "HYVÄKSYTTY" to listOf("ACCEPTÉ", "APROBADO", "APPROVATO", "GENEHMIGT", "ZATWIERDZONO"),
+        "HYLÄTTY" to listOf("REFUSÉ", "RECHAZADO", "RESPINTO", "ABGELEHNT", "ODRZUCONO"),
+        "Seinät" to listOf("Murs", "Paredes", "Pareti", "Wände", "Ściany"),
+        "Lattiat" to listOf("Sols", "Suelos", "Pavimenti", "Böden", "Podłogi"),
+        "Lattia" to listOf("Sol", "Suelo", "Pavimento", "Boden", "Podłoga"),
+        "Seinä" to listOf("Mur", "Pared", "Parete", "Wand", "Ściana"),
+        "seinät" to listOf("murs", "paredes", "pareti", "Wände", "ściany"),
+        "lattia" to listOf("sol", "suelo", "pavimento", "Boden", "podłoga"),
+        "Seinät ja lattia" to listOf("Murs et sol", "Paredes y suelo", "Pareti e pavimento", "Wände und Boden", "Ściany i podłoga"),
+        "Seinät ja lattiat" to listOf("Murs et sols", "Paredes y suelos", "Pareti e pavimenti", "Wände und Böden", "Ściany i podłogi"),
         "TARKASTUSPÖYTÄKIRJA" to listOf("Rapport d’inspection", "Acta de inspección", "Verbale di ispezione", "Prüfprotokoll", "Protokół kontroli"),
         "Kansio / alikansio" to listOf("Dossier / sous-dossier", "Carpeta / subcarpeta", "Cartella / sottocartella", "Ordner / Unterordner", "Folder / podfolder"),
         "Y-tunnus" to listOf("Identifiant entreprise", "Identificación fiscal", "Codice fiscale aziendale", "Unternehmensnummer", "Numer identyfikacyjny firmy"),
@@ -156,7 +184,7 @@ internal class PdfLabels(private val language: String) {
     )
     fun text(value: String): String {
         val extraIndex = listOf("fr", "es", "it", "de", "pl").indexOf(language)
-        if (extraIndex >= 0) return extra.entries.firstOrNull { it.key.equals(value, true) }?.value?.get(extraIndex) ?: translations[value]?.getOrNull(1) ?: value
+        if (extraIndex >= 0) return extra[value]?.get(extraIndex) ?: extra.entries.firstOrNull { it.key.equals(value.trim(), true) }?.value?.get(extraIndex) ?: translations[value]?.getOrNull(1) ?: value
         if (language == "fi") return value
         val index = when (language) { "ru" -> 0; "en" -> 1; "sv" -> 2; "et" -> 3; "lt" -> 4; "lv" -> 5; "nb" -> 6; "da" -> 7; else -> return value }
         return translations[value]?.getOrNull(index)
