@@ -159,8 +159,10 @@ internal fun ValvontaApp(
         val isNewReport = currentReport == null
         currentReport = report
         if (isNewReport) reports = listOf(report) + reports.filterNot { it.id == report.id }
-        pendingSaveJob?.cancel()
+        val previousSave = pendingSaveJob
+        previousSave?.cancel()
         pendingSaveJob = coroutineScope.launch {
+            previousSave?.join()
             if (!isNewReport) delay(350)
             try {
                 val latestReports = withContext(Dispatchers.IO) {
@@ -307,7 +309,8 @@ internal fun ValvontaApp(
                     createdAt = LocalDate.now().toString(),
                     templateName = "",
                     photos = emptyList(),
-                    signatureStrokes = emptyList()
+                    signatureStrokes = emptyList(),
+                    signatureImagePath = ""
                 )))
             },
             onCreate = {
@@ -417,8 +420,8 @@ internal fun ValvontaApp(
                 }
             },
             onDeletePhoto = { photoPath ->
-                repository.deletePhoto(photoPath)
-                saveReport(active.copy(photos = active.photos.filterNot { it.filePath == photoPath }))
+                val latest = currentReport ?: active
+                saveReport(latest.copy(photos = latest.photos.filterNot { it.filePath == photoPath }))
             }
         )
     }
