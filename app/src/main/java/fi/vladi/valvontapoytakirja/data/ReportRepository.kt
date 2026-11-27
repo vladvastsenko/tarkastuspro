@@ -27,7 +27,7 @@ class ReportRepository(private val context: Context) {
     private fun settingsFile(): File = File(context.filesDir, "app_settings.json")
 
     fun loadSettings(): AppSettings =
-        runCatching { json.decodeFromString(AppSettings.serializer(), settingsFile().readText()) }
+        runCatching { json.decodeFromString(AppSettings.serializer(), settingsFile().readAtomicText()) }
             .getOrDefault(AppSettings())
 
     fun saveSettings(settings: AppSettings) {
@@ -47,7 +47,7 @@ class ReportRepository(private val context: Context) {
     fun listInspectors(): List<InspectorProfile> =
         inspectorsDirectory().listFiles { it.extension == "json" }
             ?.mapNotNull { file ->
-                runCatching { json.decodeFromString(InspectorProfile.serializer(), file.readText()) }.getOrNull()
+                runCatching { json.decodeFromString(InspectorProfile.serializer(), file.readAtomicText()) }.getOrNull()
             }
             ?.sortedBy { it.name.lowercase() }
             ?: emptyList()
@@ -74,18 +74,20 @@ class ReportRepository(private val context: Context) {
     fun listCustomers(): List<CustomerProfile> =
         customersDirectory().listFiles { it.extension == "json" }
             ?.mapNotNull { file ->
-                runCatching { json.decodeFromString(CustomerProfile.serializer(), file.readText()) }.getOrNull()
+                runCatching { json.decodeFromString(CustomerProfile.serializer(), file.readAtomicText()) }.getOrNull()
             }
             ?.sortedBy { it.name.lowercase() }
             ?: emptyList()
 
     fun saveCustomer(customer: CustomerProfile) {
+        requireSafeId(customer.id)
         val file = File(customersDirectory(), "${customer.id}.json")
         file.writeAtomicText(json.encodeToString(CustomerProfile.serializer(), customer))
         SharedDocumentsArchive.archiveFile(context, file, "Asetukset/Asiakkaat", file.name, "application/json")
     }
 
     fun deleteCustomer(customerId: String) {
+        requireSafeId(customerId)
         File(customersDirectory(), "${customerId}.json").delete()
         listSites().filter { it.customerId == customerId }.forEach { deleteSite(it.id) }
     }
@@ -96,19 +98,21 @@ class ReportRepository(private val context: Context) {
     fun listSites(customerId: String? = null): List<CustomerSite> =
         sitesDirectory().listFiles { it.extension == "json" }
             ?.mapNotNull { file ->
-                runCatching { json.decodeFromString(CustomerSite.serializer(), file.readText()) }.getOrNull()
+                runCatching { json.decodeFromString(CustomerSite.serializer(), file.readAtomicText()) }.getOrNull()
             }
             ?.filter { customerId == null || it.customerId == customerId }
             ?.sortedBy { it.name.lowercase() }
             ?: emptyList()
 
     fun saveSite(site: CustomerSite) {
+        requireSafeId(site.id)
         val file = File(sitesDirectory(), "${site.id}.json")
         file.writeAtomicText(json.encodeToString(CustomerSite.serializer(), site))
         SharedDocumentsArchive.archiveFile(context, file, "Asetukset/Kohteet", file.name, "application/json")
     }
 
     fun deleteSite(siteId: String) {
+        requireSafeId(siteId)
         File(sitesDirectory(), "${siteId}.json").delete()
     }
 
@@ -122,7 +126,7 @@ class ReportRepository(private val context: Context) {
         }
         val destination = File(directory, "signature_${inspectorId}_${Instant.now().toEpochMilli()}.$extension")
         val input = context.contentResolver.openInputStream(uri) ?: error("Unable to open inspector signature")
-        input.use { source -> destination.outputStream().use { output -> source.copyTo(output) } }
+        input.use { source -> destination.writeAtomicBytes { output -> source.copyTo(output) } }
         destination
     }.getOrNull()
 
@@ -135,7 +139,7 @@ class ReportRepository(private val context: Context) {
         }
         val destination = File(directory, "signature_${Instant.now().toEpochMilli()}.$extension")
         val input = context.contentResolver.openInputStream(uri) ?: error("Unable to open signature")
-        input.use { source -> destination.outputStream().use { output -> source.copyTo(output) } }
+        input.use { source -> destination.writeAtomicBytes { output -> source.copyTo(output) } }
         destination
     }.getOrNull()
 
@@ -149,7 +153,7 @@ class ReportRepository(private val context: Context) {
             }
             val destination = File(directory, "logo_${Instant.now().toEpochMilli()}.$extension")
             val input = context.contentResolver.openInputStream(uri) ?: error("Unable to open selected logo")
-            input.use { source -> destination.outputStream().use { output -> source.copyTo(output) } }
+            input.use { source -> destination.writeAtomicBytes { output -> source.copyTo(output) } }
             destination
         }.getOrNull()
     }
@@ -160,7 +164,7 @@ class ReportRepository(private val context: Context) {
     fun listReports(): List<InspectionReport> =
         reportsDirectory().listFiles { it.extension == "json" }
             ?.mapNotNull { file ->
-                runCatching { json.decodeFromString(InspectionReport.serializer(), file.readText()) }.getOrNull()
+                runCatching { json.decodeFromString(InspectionReport.serializer(), file.readAtomicText()) }.getOrNull()
             }
             ?.sortedByDescending { it.createdAt }
             ?: emptyList()
@@ -171,7 +175,7 @@ class ReportRepository(private val context: Context) {
     fun listTemplates(): List<InspectionReport> =
         templatesDirectory().listFiles { it.extension == "json" }
             ?.mapNotNull { file ->
-                runCatching { json.decodeFromString(InspectionReport.serializer(), file.readText()) }.getOrNull()
+                runCatching { json.decodeFromString(InspectionReport.serializer(), file.readAtomicText()) }.getOrNull()
             }
             ?.sortedBy { it.templateName.lowercase() }
             ?: emptyList()
@@ -242,7 +246,7 @@ class ReportRepository(private val context: Context) {
                     ?: error("Unable to decode selected image")
             }
             try {
-                destination.outputStream().buffered().use { output ->
+                destination.writeAtomicBytes { output ->
                     check(bitmap.compress(Bitmap.CompressFormat.JPEG, 90, output)) {
                         "Unable to save selected image"
                     }
@@ -266,7 +270,7 @@ class ReportRepository(private val context: Context) {
             val destination = File(directory, "logo.${extension}")
             val input = context.contentResolver.openInputStream(uri) ?: error("Unable to open selected logo")
             input.use {
-                destination.outputStream().use { output -> it.copyTo(output) }
+                destination.writeAtomicBytes { output -> it.copyTo(output) }
             }
             destination
         }.getOrNull()
@@ -289,6 +293,20 @@ private fun File.writeAtomicText(value: String) {
     val stream = atomic.startWrite()
     try {
         stream.write(value.toByteArray(Charsets.UTF_8))
+        atomic.finishWrite(stream)
+    } catch (error: Throwable) {
+        atomic.failWrite(stream)
+        throw error
+    }
+}
+
+private fun File.readAtomicText(): String = android.util.AtomicFile(this).openRead().bufferedReader(Charsets.UTF_8).use { it.readText() }
+
+private fun File.writeAtomicBytes(write: (java.io.OutputStream) -> Unit) {
+    val atomic = android.util.AtomicFile(this)
+    val stream = atomic.startWrite()
+    try {
+        write(stream)
         atomic.finishWrite(stream)
     } catch (error: Throwable) {
         atomic.failWrite(stream)
