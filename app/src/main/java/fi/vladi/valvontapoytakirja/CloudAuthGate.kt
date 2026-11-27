@@ -261,7 +261,7 @@ internal fun CloudAuthGate(content: @Composable (onSignOut: () -> Unit, registra
             modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 10.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            Text("Tarkastus Cloud", style = MaterialTheme.typography.headlineSmall)
+            Text("Tarkastus Pro", style = MaterialTheme.typography.headlineSmall)
             Text(stringResource(R.string.guest_explanation), style = MaterialTheme.typography.bodyMedium)
             Button(onClick = {
                 clearGoogleRegistration()

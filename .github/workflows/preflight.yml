@@ -17,10 +17,10 @@ jobs:
           gradle-version: '8.11.1'
       - name: Validate independent Firebase configuration
         env:
-          CLOUD_GOOGLE_SERVICES_JSON: ${{ secrets.CLOUD_GOOGLE_SERVICES_JSON }}
+          PRO_GOOGLE_SERVICES_JSON: ${{ secrets.PRO_GOOGLE_SERVICES_JSON }}
         run: |
-          test -n "$CLOUD_GOOGLE_SERVICES_JSON" || { echo "::error::Missing CLOUD_GOOGLE_SERVICES_JSON"; exit 1; }
-          printf '%s' "$CLOUD_GOOGLE_SERVICES_JSON" > app/google-services.json
+          test -n "$PRO_GOOGLE_SERVICES_JSON" || { echo "::error::Missing PRO_GOOGLE_SERVICES_JSON"; exit 1; }
+          printf '%s' "$PRO_GOOGLE_SERVICES_JSON" > app/google-services.json
           python3 scripts/check-firebase.py
       - name: Compile Kotlin and resources without packaging APK
         run: gradle :app:compileDebugKotlin :tarkastus:compileDebugKotlin --no-daemon

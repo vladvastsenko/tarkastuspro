@@ -1,4 +1,4 @@
-name: Tarkastus Cloud Premium server tests
+name: Tarkastus Pro Premium server tests
 on:
   workflow_dispatch:
 permissions:

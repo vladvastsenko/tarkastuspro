@@ -2,7 +2,7 @@ const {onCall,HttpsError} = require("firebase-functions/v2/https");
 const {GoogleAuth} = require("google-auth-library");
 const {assess,product} = require("./policy");
 const auth = new GoogleAuth({scopes:["https://www.googleapis.com/auth/androidpublisher"]});
-const base = "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/fi.vladi.tarkastuscloud/purchases";
+const base = "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/fi.vladi.tarkastuspro/purchases";
 exports.verifyPremium = onCall({region:"europe-west1",maxInstances:5}, async request => {
   const uid = request.auth?.uid;
   if (!uid) throw new HttpsError("unauthenticated","Sign in required");

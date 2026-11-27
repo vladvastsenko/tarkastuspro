@@ -19,7 +19,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "fi.vladi.tarkastuscloud"
+        applicationId = "fi.vladi.tarkastuspro"
         minSdk = 26
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         targetSdk = 35
@@ -27,8 +27,8 @@ android {
         versionName = if (preview) "0.1.0-preview" else "0.1.0"
         buildConfigField("boolean", "OFFLINE_PREVIEW", preview.toString())
         buildConfigField("boolean", "PREMIUM_CHECKOUT_ENABLED", (!preview && providers.gradleProperty("premiumCheckout").orNull == "true").toString())
-        manifestPlaceholders["cloudAdMobAppId"] = if (!preview) "ca-app-pub-5274592019802045~8397178305" else "ca-app-pub-3940256099942544~3347511713"
-        buildConfigField("String", "CLOUD_BANNER_ID", if (productionAds) "\"ca-app-pub-5274592019802045/9861021951\"" else "\"ca-app-pub-3940256099942544/6300978111\"")
+        manifestPlaceholders["cloudAdMobAppId"] = "ca-app-pub-3940256099942544~3347511713"
+        buildConfigField("String", "CLOUD_BANNER_ID", "\"ca-app-pub-3940256099942544/6300978111\"")
     }
 
     if (!cloudKeystorePath.isNullOrBlank() &&
