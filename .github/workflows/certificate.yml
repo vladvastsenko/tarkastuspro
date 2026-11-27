@@ -7,7 +7,7 @@ jobs:
   fingerprints:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -25,4 +25,7 @@ jobs:
           key="$(mktemp)"
           trap 'rm -f "$key"' EXIT
           printf '%s' "$PRO_KEYSTORE_B64" | tr -d '[:space:]' | base64 --decode > "$key"
-          keytool -list -v -keystore "$key" -storepass:env PRO_KEYSTORE_PASSWORD -alias "$PRO_KEY_ALIAS" | grep -E 'SHA1:|SHA256:'
+          export LC_ALL=C
+          keytool -J-Duser.language=en -J-Duser.country=US -list -v -storetype PKCS12 -keystore "$key" -storepass:env PRO_KEYSTORE_PASSWORD -alias "$PRO_KEY_ALIAS" > "$key.log" 2>&1 || { cat "$key.log"; rm -f "$key.log"; exit 1; }
+          cat "$key.log"
+          rm -f "$key.log"
