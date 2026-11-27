@@ -74,7 +74,7 @@
     <string name="share_report">Condividi rapporto</string>
     <string name="ui_preview_pdf">Anteprima PDF</string>
     <string name="ui_preview_unavailable">Nessun visualizzatore PDF installato</string>
-    <string name="app_name">Tarkastus Cloud</string>
+    <string name="app_name">Tarkastus Pro</string>
     <string name="choose_report">Scegli il tipo di rapporto da creare.</string>
     <string name="settings_sync">Impostazioni e sincronizzazione</string>
     <string name="shared_settings">Impostazioni comuni</string>
@@ -173,7 +173,7 @@
     <string name="bio_cancelled">Autenticazione annullata. Riprova.</string>
     <string name="bio_sign_in_again">Biometria non disponibile. Accedi di nuovo.</string>
     <string name="bio_offer_title">Accesso biometrico</string>
-    <string name="bio_offer_message">Proteggere Tarkastus Cloud con autenticazione biometrica? Puoi modificare la scelta nelle impostazioni.</string>
+    <string name="bio_offer_message">Proteggere Tarkastus Pro con autenticazione biometrica? Puoi modificare la scelta nelle impostazioni.</string>
     <string name="bio_enable">Attiva</string>
     <string name="bio_not_now">Non ora</string>
     <string name="bio_unlock">Sblocca con biometria</string>
@@ -206,7 +206,7 @@
     <string name="subscription_unavailable">Abbonamento non ancora disponibile su Google Play.</string>
     <string name="ad_privacy_options">Opzioni privacy pubblicitaria</string>
     <string name="delete_account">Elimina account</string>
-    <string name="delete_account_warning">Il tuo account Tarkastus Cloud verrà eliminato definitivamente. Rapporti locali, impostazioni e file Google Drive resteranno. Questa azione è irreversibile.</string>
+    <string name="delete_account_warning">Il tuo account Tarkastus Pro verrà eliminato definitivamente. Rapporti locali, impostazioni e file Google Drive resteranno. Questa azione è irreversibile.</string>
     <string name="delete_account_relogin">Per sicurezza, esci, accedi di nuovo e ripeti l’eliminazione dell’account.</string>
     <string name="delete_account_failed">Eliminazione account non riuscita. Riprova.</string>
     <string name="loc_materials">3. MATERIALI UTILIZZATI</string>
@@ -285,7 +285,7 @@
     <string name="cloud_invite_teammate">Invita collega in Google Drive</string>
     <string name="cloud_invite_hint">Trova la cartella in Drive e scegli Condividi. L’app non può aprire direttamente la cartella selezionata in Drive.</string>
     <string name="cloud_share_guide_title">Come condividere la cartella</string>
-    <string name="cloud_share_guide_steps">1. Apri Google Drive con l’account del proprietario della cartella condivisa.\n2. Trova la cartella condivisa Tarkastus Cloud.\n3. Tocca i tre punti → Condividi / Gestisci accesso.\n4. Inserisci l’email del dipendente e scegli Editor.\n5. Invia l’invito. Il dipendente lo accetta e seleziona la cartella condivisa in Tarkastus Cloud.\n\nNon condividere la cartella di backup personale.</string>
+    <string name="cloud_share_guide_steps">1. Apri Google Drive con l’account del proprietario della cartella condivisa.\n2. Trova la cartella condivisa Tarkastus Pro.\n3. Tocca i tre punti → Condividi / Gestisci accesso.\n4. Inserisci l’email del dipendente e scegli Editor.\n5. Invia l’invito. Il dipendente lo accetta e seleziona la cartella condivisa in Tarkastus Pro.\n\nNon condividere la cartella di backup personale.</string>
     <string name="cloud_share_open_drive">Apri Google Drive</string>
     <string name="cloud_restore_success">Backup ripristinato correttamente.</string>
     <string name="cloud_choose_private_backup_folder">Scegli cartella di backup personale</string>

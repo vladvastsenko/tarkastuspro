@@ -74,7 +74,7 @@
     <string name="share_report">Bericht teilen</string>
     <string name="ui_preview_pdf">PDF-Vorschau</string>
     <string name="ui_preview_unavailable">Kein PDF-Viewer installiert</string>
-    <string name="app_name">Tarkastus Cloud</string>
+    <string name="app_name">Tarkastus Pro</string>
     <string name="choose_report">Wählen Sie die zu erstellende Berichtsart.</string>
     <string name="settings_sync">Einstellungen und Synchronisierung</string>
     <string name="shared_settings">Gemeinsame Einstellungen</string>
@@ -173,7 +173,7 @@
     <string name="bio_cancelled">Authentifizierung abgebrochen. Erneut versuchen.</string>
     <string name="bio_sign_in_again">Biometrie nicht verfügbar. Melden Sie sich erneut an.</string>
     <string name="bio_offer_title">Biometrische Anmeldung</string>
-    <string name="bio_offer_message">Tarkastus Cloud mit biometrischer Authentifizierung schützen? Dies kann in den Einstellungen geändert werden.</string>
+    <string name="bio_offer_message">Tarkastus Pro mit biometrischer Authentifizierung schützen? Dies kann in den Einstellungen geändert werden.</string>
     <string name="bio_enable">Aktivieren</string>
     <string name="bio_not_now">Nicht jetzt</string>
     <string name="bio_unlock">Biometrisch entsperren</string>
@@ -285,7 +285,7 @@
     <string name="cloud_invite_teammate">Kollegen in Google Drive einladen</string>
     <string name="cloud_invite_hint">Suchen Sie den Ordner in Drive und wählen Sie Freigeben. Die App kann den ausgewählten Ordner nicht direkt in Drive öffnen.</string>
     <string name="cloud_share_guide_title">Ordner freigeben</string>
-    <string name="cloud_share_guide_steps">1. Öffnen Sie Google Drive mit dem Konto des Ordnereigentümers.\n2. Suchen Sie den freigegebenen Tarkastus-Pro-Ordner.\n3. Tippen Sie auf die drei Punkte → Freigeben / Zugriff verwalten.\n4. Geben Sie die E-Mail-Adresse des Mitarbeiters ein und wählen Sie Bearbeiter.\n5. Senden Sie die Einladung. Der Mitarbeiter nimmt sie an und wählt den freigegebenen Ordner in Tarkastus Cloud aus.\n\nGeben Sie Ihren persönlichen Sicherungsordner nicht frei.</string>
+    <string name="cloud_share_guide_steps">1. Öffnen Sie Google Drive mit dem Konto des Ordnereigentümers.\n2. Suchen Sie den freigegebenen Tarkastus-Pro-Ordner.\n3. Tippen Sie auf die drei Punkte → Freigeben / Zugriff verwalten.\n4. Geben Sie die E-Mail-Adresse des Mitarbeiters ein und wählen Sie Bearbeiter.\n5. Senden Sie die Einladung. Der Mitarbeiter nimmt sie an und wählt den freigegebenen Ordner in Tarkastus Pro aus.\n\nGeben Sie Ihren persönlichen Sicherungsordner nicht frei.</string>
     <string name="cloud_share_open_drive">Google Drive öffnen</string>
     <string name="cloud_restore_success">Sicherung erfolgreich wiederhergestellt.</string>
     <string name="cloud_choose_private_backup_folder">Persönlichen Sicherungsordner auswählen</string>
