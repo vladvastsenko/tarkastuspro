@@ -207,8 +207,44 @@ class ReportRepository(private val context: Context) {
     fun save(report: InspectionReport) {
         requireSafeId(report.id)
         val file = File(reportsDirectory(), "${report.id}.json")
-        file.writeAtomicText(json.encodeToString(InspectionReport.serializer(), report))
+        val portable = report.copy(
+            photos = report.photos.map { it.copy(filePath = portableAttachment(report.id, it.filePath, "photo")) },
+            logoPath = portableAttachment(report.id, report.logoPath, "logo"),
+            signatureImagePath = portableAttachment(report.id, report.signatureImagePath, "signature")
+        )
+        file.writeAtomicText(json.encodeToString(InspectionReport.serializer(), portable))
         SharedDocumentsArchive.archiveFile(context, file, "Raportit/Data/Valvontapoytakirja", file.name, "application/json")
+    }
+
+    private fun portableAttachment(id: String, path: String, kind: String): String {
+        if (path.isBlank()) return path
+        val prefix = "reports/$id/"
+        val resolved = resolveReportAttachment(context.filesDir, id, path)
+        val source = File(resolved).canonicalFile
+        val root = context.filesDir.canonicalFile
+        val own = File(root, prefix).canonicalFile
+        if (source.isFile && source.path.startsWith(own.path + File.separator))
+            return source.relativeTo(root).invariantSeparatorsPath
+        if (!source.isFile || !source.path.startsWith(root.path + File.separator)) return path
+        val relative = source.relativeTo(root).invariantSeparatorsPath
+        if (relative.substringBefore('/') !in setOf("settings", "inspectors")) return path
+        val digest = java.security.MessageDigest.getInstance("SHA-256")
+        source.inputStream().use { input ->
+            val buffer = ByteArray(8192)
+            while (true) {
+                val count = input.read(buffer)
+                if (count < 0) break
+                digest.update(buffer, 0, count)
+            }
+        }
+        val hash = digest.digest().joinToString("") { "%02x".format(it) }
+        val extension = source.extension.lowercase().takeIf { it in setOf("png", "jpg", "jpeg", "webp") } ?: "img"
+        val target = File(own, "attachments/${kind}_$hash.$extension")
+        target.parentFile?.mkdirs()
+        if (!target.isFile) source.inputStream().use { input ->
+            target.writeAtomicBytes { output -> input.copyTo(output) }
+        }
+        return target.relativeTo(root).invariantSeparatorsPath
     }
 
     fun createCameraPhotoFile(reportId: String): File {
