@@ -17,11 +17,12 @@ import java.io.File
 object ReportPdfGenerator {
     fun generate(context: Context, report: InspectionReport, settings: AppSettings): File {
         val selectedLanguage = report.pdfLanguage.ifBlank { fi.vladi.tarkastuspoytakirja.AppLanguage.selected(context) }
-        val firstPass = render(report, settings, totalPages = null, language = selectedLanguage)
+        val snapshot = if (report.settingsSnapshotCreated) settings.copy(logoPath = report.logoPath, headerText = report.headerText, footerText = report.footerText, signatureImagePath = report.signatureImagePath, signatureStrokes = report.signatureStrokes, inspectorName = report.inspectorName, inspectorCertificateNumber = report.inspectorCertificateNumber, inspectorPhone = report.inspectorPhone, inspectorEmail = report.inspectorEmail) else settings
+        val firstPass = render(report, snapshot, totalPages = null, language = selectedLanguage)
         val totalPages = firstPass.second
         firstPass.first.close()
 
-        val finalPass = render(report, settings, totalPages, language = selectedLanguage)
+        val finalPass = render(report, snapshot, totalPages, language = selectedLanguage)
         val document = finalPass.first
         val exportDirectory = File(context.cacheDir, "exports").apply { mkdirs() }
         val output = File(exportDirectory, PdfFileNames.name(report.pdfLanguage.ifBlank { selectedLanguage }, "valvonta", report.siteAddress))

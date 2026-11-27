@@ -92,7 +92,18 @@ internal class PdfLabels(private val language: String) {
         "Menekki" to listOf("Расход", "Consumption", "Åtgång", "Kulu", "Sąnaudos", "Patēriņš", "Forbruk", "Forbrug"),
         "Kuivakalvo" to listOf("Сухая плёнка", "Dry film", "Torrfilm", "Kuiv kiht", "Sausa plėvelė", "Sausā plēve", "Tørrfilm", "Tørfilm")
     )
+    private val extra = mapOf(
+        "VALVONTAPÖYTÄKIRJA" to listOf("Contrôle d’étanchéité", "Inspección de impermeabilización", "Controllo impermeabilizzazione", "Abdichtungsprüfung", "Kontrola hydroizolacji"),
+        "Kohde" to listOf("Chantier", "Obra", "Cantiere", "Objekt", "Obiekt"),
+        "Tilaaja" to listOf("Client", "Cliente", "Committente", "Auftraggeber", "Zamawiający"),
+        "Hyväksytty" to listOf("Accepté", "Aprobado", "Approvato", "Genehmigt", "Zatwierdzono"),
+        "Hylätty" to listOf("Refusé", "Rechazado", "Respinto", "Abgelehnt", "Odrzucono"),
+        "Kyllä" to listOf("Oui", "Sí", "Sì", "Ja", "Tak"),
+        "Ei" to listOf("Non", "No", "No", "Nein", "Nie")
+    )
     fun text(value: String): String {
+        val extraIndex = listOf("fr", "es", "it", "de", "pl").indexOf(language)
+        if (extraIndex >= 0) return extra.entries.firstOrNull { it.key.equals(value, true) }?.value?.get(extraIndex) ?: translations[value]?.getOrNull(1) ?: value
         if (language == "fi") return value
         val index = when (language) { "ru" -> 0; "en" -> 1; "sv" -> 2; "et" -> 3; "lt" -> 4; "lv" -> 5; "nb" -> 6; "da" -> 7; else -> return value }
         return translations[value]?.getOrNull(index)

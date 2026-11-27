@@ -109,6 +109,7 @@ private fun isWaterproofingFamilyCategory(category: String): Boolean =
 
 @Composable
 internal fun ValvontaApp(
+    createImmediately: Boolean = false,
     initialShowSettings: Boolean = false,
     onBackToLauncher: () -> Unit = {},
     onBackFromSettings: () -> Unit = {}
@@ -232,6 +233,9 @@ internal fun ValvontaApp(
         }
     }
 
+    LaunchedEffect(Unit) {
+        if (createImmediately && currentReport == null) saveReport(applySettingsSnapshot(InspectionReport(workStartDate = LocalDate.now().toString())))
+    }
     val active = currentReport
     androidx.activity.compose.BackHandler {
         if (currentReport == null) onBackToLauncher() else coroutineScope.launch {
