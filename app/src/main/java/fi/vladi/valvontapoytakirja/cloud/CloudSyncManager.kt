@@ -35,7 +35,7 @@ object CloudSyncManager {
         return when (parts.first()) {
             "customers", "customer_sites" -> parts.size == 2 &&
                 parts.last().endsWith(".json")
-            "tarkastus_reports" ->
+            "reports", "tarkastus_reports" ->
                 (parts.size == 2 && parts.last().endsWith(".json")) ||
                 (parts.size == 4 && parts[2] == "photos" &&
                     parts.last().substringAfterLast('.', "").lowercase() in

@@ -233,6 +233,15 @@ internal fun ValvontaApp(
     }
 
     val active = currentReport
+    androidx.activity.compose.BackHandler {
+        if (currentReport == null) onBackToLauncher() else coroutineScope.launch {
+            pendingGalleryJob?.join()
+            pendingSaveJob?.cancel()
+            val latest = currentReport ?: return@launch
+            reports = withContext(Dispatchers.IO) { repository.save(latest); repository.listReports() }
+            currentReport = null
+        }
+    }
     if (active == null && showSettings) {
         SettingsScreen(
             settings = appSettings,

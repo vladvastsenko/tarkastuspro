@@ -182,7 +182,8 @@ class ReportRepository(private val context: Context) {
             createdAt = Instant.now().toString(),
             templateName = name.trim(),
             photos = emptyList(),
-            signatureStrokes = emptyList()
+            signatureStrokes = emptyList(),
+            signatureImagePath = ""
         )
         File(templatesDirectory(), template.id + ".json")
             .writeAtomicText(json.encodeToString(InspectionReport.serializer(), template))
