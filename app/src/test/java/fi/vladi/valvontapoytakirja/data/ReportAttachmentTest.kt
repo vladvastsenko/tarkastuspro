@@ -23,7 +23,11 @@ class ReportAttachmentTest {
         file.parentFile.mkdirs()
         file.writeText("attachment")
         for (path in listOf("reports/r2/photo.jpg", "reports/r1/../r2/photo.jpg", "/unrelated/photo.jpg")) {
-            assertEquals(path, resolveReportAttachment(root, "r1", path))
+            assertEquals("", resolveReportAttachment(root, "r1", path))
         }
+    }
+    @Test fun preservesMissingPortableImage() {
+        assertEquals("reports/r1/photos/a.jpg", resolveReportAttachment(folder.root, "r1", "/data/user/10/app/files/reports/r1/photos/a.jpg"))
+        assertEquals("", resolveReportAttachment(folder.root, "r1", "reports/r1/private.json"))
     }
 }
