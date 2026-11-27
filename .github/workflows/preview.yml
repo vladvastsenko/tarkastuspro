@@ -18,7 +18,7 @@ jobs:
       - name: Verify supplied Pro artwork
         run: |
           cmp icon1.png app/src/main/res/drawable/icon.png
-          cmp tarkastuspro.png app/src/main/res/drawable/tarkastuscloud.png
+          cmp tarkastuspro1.png app/src/main/res/drawable/tarkastuscloud.png
       - run: python3 scripts/check-cloud-locales.py
       - name: Build with dedicated Cloud signing key when configured
         env:
