@@ -51,7 +51,7 @@ object ReportPdfGenerator {
             writer.field("Y-tunnus", report.customerBusinessId)
             writer.field("Tilaajan osoite", listOf(report.customerAddress, report.customerPostalCode, report.customerCity).filter { it.isNotBlank() }.joinToString(", "))
             writer.field("Kohde", listOf(report.siteName, report.siteAddress).filter { it.isNotBlank() }.joinToString(" – "))
-            report.siteFieldValues.filter { it.label.isNotBlank() && it.value.isNotBlank() }.forEach { writer.field(it.label, it.value) }
+            report.siteFieldValues.filter { it.label.isNotBlank() && it.value.isNotBlank() }.forEach { writer.field(it.label, it.value, translateLabel = false) }
             writer.field("Tilaaja / kohteen edustaja", report.clientOrRepresentative)
             writer.field("Tilaajan puhelinnumero", report.clientPhone)
             writer.field("Tilaajan sähköposti", report.clientEmail)
@@ -69,7 +69,7 @@ object ReportPdfGenerator {
             writer.section("ALUSTAT JA TYÖOLOSUHTEET")
             writer.field("Seinien alusta", report.wallSubstrate)
             writer.field("Lattian alusta", report.floorSubstrate)
-            writer.field("Työohjeet annettu ja luettu", if (report.workInstructionsProvidedAndRead) "Kyllä" else "Ei")
+            writer.field("Työohjeet annettu ja luettu", PdfLabels(language).text(if (report.workInstructionsProvidedAndRead) "Kyllä" else "Ei"))
             writer.field("Lämpötila (°C)", report.roomTemperatureC)
             writer.field("Suhteellinen kosteus (%)", report.relativeHumidityPercent)
             writer.field("Alustan kosteus (%)", report.substrateMoisturePercent)
@@ -241,10 +241,10 @@ object ReportPdfGenerator {
                     strokeWidth = 0.6f
                 }
             )
-            if (footerText.isNotBlank()) {
+            if (footerText.isNotBlank() && totalPages == pageNumber) {
                 val lines = wrapCaption(footerText, footerPaint, pageWidth - margin * 2 - 70f).take(2)
                 lines.forEachIndexed { index, line ->
-                    page.canvas.drawText(line, margin, pageHeight - 18f + index * 10f, footerPaint)
+                    page.canvas.drawText(line, margin, pageHeight - 24f + index * 10f, footerPaint)
                 }
             }
             val pageLabel = "$pageNumber/${totalPages ?: pageNumber}"
@@ -291,9 +291,9 @@ object ReportPdfGenerator {
             y += 22f
         }
 
-        fun field(label: String, value: String) {
+        fun field(label: String, value: String, translateLabel: Boolean = true) {
             if (label.isBlank() || value.isBlank()) return
-            drawWrapped("${labels.text(label)}: $value", bodyPaint, 14f)
+            drawWrapped("${if (translateLabel) labels.text(label) else label}: $value", bodyPaint, 14f)
         }
 
         private fun drawWrapped(value: String, paint: Paint, lineHeight: Float) {
