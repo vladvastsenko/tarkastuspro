@@ -247,6 +247,7 @@ internal fun ValvontaApp(
         if (currentReport == null) onBackToLauncher() else coroutineScope.launch {
             pendingGalleryJob?.join()
             pendingSaveJob?.cancel()
+            pendingSaveJob?.join()
             val latest = currentReport ?: return@launch
             reports = withContext(Dispatchers.IO) { repository.save(latest); repository.listReports() }
             currentReport = null
@@ -334,6 +335,7 @@ internal fun ValvontaApp(
                 coroutineScope.launch {
                     pendingGalleryJob?.join()
                     pendingSaveJob?.cancel()
+                    pendingSaveJob?.join()
                     val latest = currentReport ?: active
                     val latestReports = withContext(Dispatchers.IO) {
                         repository.save(latest)
@@ -357,6 +359,7 @@ internal fun ValvontaApp(
             },
             onPreview = {
                 coroutineScope.launch {
+                    try {
                     pendingGalleryJob?.join()
                     val latest = currentReport ?: active
                     val pdf = withContext(Dispatchers.IO) {
@@ -372,12 +375,19 @@ internal fun ValvontaApp(
                     } catch (_: android.content.ActivityNotFoundException) {
                         android.widget.Toast.makeText(context, context.getString(R.string.ui_preview_unavailable), android.widget.Toast.LENGTH_LONG).show()
                     }
+                    } catch (cancelled: kotlinx.coroutines.CancellationException) {
+                        throw cancelled
+                    } catch (error: Exception) {
+                        android.widget.Toast.makeText(context, error.localizedMessage ?: context.getString(R.string.ui_preview_unavailable), android.widget.Toast.LENGTH_LONG).show()
+                    }
                 }
             },
             onExport = {
                 coroutineScope.launch {
+                    try {
                     pendingGalleryJob?.join()
                     pendingSaveJob?.cancel()
+                    pendingSaveJob?.join()
                     val latest = currentReport ?: active
                     val pdf = withContext(Dispatchers.IO) {
                         repository.save(latest)
@@ -399,6 +409,11 @@ internal fun ValvontaApp(
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
                 context.startActivity(Intent.createChooser(sendIntent, context.getString(R.string.share_report)))
+                    } catch (cancelled: kotlinx.coroutines.CancellationException) {
+                        throw cancelled
+                    } catch (error: Exception) {
+                        android.widget.Toast.makeText(context, error.localizedMessage ?: context.getString(R.string.ui_preview_unavailable), android.widget.Toast.LENGTH_LONG).show()
+                    }
                 }
             },
             onDeletePhoto = { photoPath ->
