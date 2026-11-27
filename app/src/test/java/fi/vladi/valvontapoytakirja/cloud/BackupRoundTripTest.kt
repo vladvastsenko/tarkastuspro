@@ -47,6 +47,45 @@ class BackupRoundTripTest {
         }
     }
 
+    @Test fun waterproofingArchiveSurvivesDeviceTransferAndStableResave() {
+        val base = Files.createTempDirectory("valvonta-transfer").toFile()
+        try {
+            val a = File(base, "a/files").apply { mkdirs() }
+            val b = File(base, "b/files").apply { mkdirs() }
+            fun repo(dir: File): fi.vladi.valvontapoytakirja.data.ReportRepository {
+                val context = object : android.content.ContextWrapper(org.robolectric.RuntimeEnvironment.getApplication()) {
+                    override fun getFilesDir(): File = dir
+                }
+                return fi.vladi.valvontapoytakirja.data.ReportRepository(context)
+            }
+            fun attachment(path: String): File = File(a, path).apply {
+                parentFile!!.mkdirs()
+                writeBytes(byteArrayOf(1, 2, 3))
+            }
+            val photo = attachment("reports/r1/photos/photo.jpg")
+            val logo = attachment("settings/logo.png")
+            val signature = attachment("inspectors/signatures/signature.png")
+            val report = fi.vladi.valvontapoytakirja.model.InspectionReport(
+                id = "r1", logoPath = logo.path, signatureImagePath = signature.path,
+                photos = listOf(fi.vladi.valvontapoytakirja.model.ReportPhoto(filePath = photo.path))
+            )
+            repo(a).save(report)
+            val original = File(a, "reports/r1.json").readBytes()
+            val zip = File(base, "backup.zip")
+            writeBackupArchive(a, zip)
+            extractBackup(zip.inputStream(), b)
+            relocateBackupPaths(b, b)
+            assertTrue(a.deleteRecursively())
+            val loaded = repo(b).listReports().single()
+            for (path in listOf(loaded.logoPath, loaded.signatureImagePath, loaded.photos.single().filePath)) {
+                assertTrue(File(path).canonicalPath.startsWith(b.canonicalPath + File.separator))
+                assertArrayEquals(byteArrayOf(1, 2, 3), File(path).readBytes())
+            }
+            repo(b).save(loaded)
+            assertArrayEquals(original, File(b, "reports/r1.json").readBytes())
+        } finally { base.deleteRecursively() }
+    }
+
     @Test fun roundTripAllReportModelsAndImages() {
         val base = Files.createTempDirectory("backup-roundtrip").toFile()
         try {
