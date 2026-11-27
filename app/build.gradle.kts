@@ -1,0 +1,100 @@
+plugins {
+    id("com.android.application")
+    id("com.google.gms.google-services") apply false
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.serialization")
+    id("org.jetbrains.kotlin.plugin.compose")
+}
+
+val preview = providers.gradleProperty("offlinePreview").orNull == "true"
+if (!preview) apply(plugin = "com.google.gms.google-services")
+val productionAds = !preview && providers.gradleProperty("productionAds").orNull == "true"
+
+val cloudKeystorePath = System.getenv("CLOUD_KEYSTORE_PATH")
+val cloudKeystorePassword = System.getenv("CLOUD_KEYSTORE_PASSWORD")
+val cloudKeyAlias = System.getenv("CLOUD_KEY_ALIAS")
+
+android {
+    namespace = "fi.vladi.valvontapoytakirja"
+    compileSdk = 35
+
+    defaultConfig {
+        applicationId = "fi.vladi.tarkastuscloud"
+        minSdk = 26
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        targetSdk = 35
+        versionCode = 1
+        versionName = if (preview) "0.1.0-preview" else "0.1.0"
+        buildConfigField("boolean", "OFFLINE_PREVIEW", preview.toString())
+        buildConfigField("boolean", "PREMIUM_CHECKOUT_ENABLED", (!preview && providers.gradleProperty("premiumCheckout").orNull == "true").toString())
+        manifestPlaceholders["cloudAdMobAppId"] = if (!preview) "ca-app-pub-5274592019802045~8397178305" else "ca-app-pub-3940256099942544~3347511713"
+        buildConfigField("String", "CLOUD_BANNER_ID", if (productionAds) "\"ca-app-pub-5274592019802045/9861021951\"" else "\"ca-app-pub-3940256099942544/6300978111\"")
+    }
+
+    if (!cloudKeystorePath.isNullOrBlank() &&
+        !cloudKeystorePassword.isNullOrBlank() &&
+        !cloudKeyAlias.isNullOrBlank()
+    ) {
+        signingConfigs.create("cloud") {
+            storeFile = file(cloudKeystorePath)
+            storePassword = cloudKeystorePassword
+            keyAlias = cloudKeyAlias
+            keyPassword = cloudKeystorePassword
+        }
+        buildTypes.getByName("debug").signingConfig = signingConfigs.getByName("cloud")
+    }
+
+    testOptions {
+        unitTests.all {
+            it.systemProperty("robolectric.dependency.repo.url", "https://maven-central.storage-download.googleapis.com/maven2")
+        }
+    }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+dependencies {
+    androidTestImplementation("androidx.test:runner:1.6.2")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.robolectric:robolectric:4.14.1")
+    implementation(project(":tarkastus"))
+    implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-functions")
+    implementation("com.google.firebase:firebase-appcheck-playintegrity")
+    implementation("com.android.billingclient:billing:8.1.0")
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
+    implementation("com.google.android.gms:play-services-ads:24.7.0")
+    implementation("com.google.android.ump:user-messaging-platform:3.2.0")
+    implementation("androidx.core:core-ktx:1.15.0")
+    implementation("androidx.documentfile:documentfile:1.0.1")
+    implementation("androidx.activity:activity-compose:1.10.1")
+    implementation("androidx.biometric:biometric:1.1.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+
+    val composeBom = platform("androidx.compose:compose-bom:2025.02.00")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material-icons-extended")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+}

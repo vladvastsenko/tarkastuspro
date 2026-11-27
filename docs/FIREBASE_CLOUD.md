@@ -1,0 +1,4 @@
+# Tarkastus Cloud Firebase setup
+Create an independent Firebase project, suggested ID tarkastus-cloud-universal (or another available unique ID). Do not reuse the former project's ID tarkastus-cloud or project number 425303240003.
+Register Android package fi.vladi.tarkastuscloud. Enable Email/Password and Google in Authentication. Add SHA-1 and SHA-256 for the actual APK signing certificate, then download google-services.json again. Store its complete JSON as the repository Actions secret CLOUD_GOOGLE_SERVICES_JSON; do not commit it. Local builds may use app/google-services.json.
+Run Cloud Firebase preflight to validate configuration and compile. Offline previews remain independent of Firebase. For Google login testing, use a persistent Cloud signing key and register its certificate; never reuse the Pro signing key by default. Firebase is for authentication, not report storage. Test AdMob IDs remain enabled in authenticated builds.
