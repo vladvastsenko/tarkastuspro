@@ -62,7 +62,7 @@ internal object BiometricLock {
                 }
             })
         prompt.authenticate(BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Tarkastus Cloud")
+            .setTitle(context.getString(R.string.app_name))
             .setSubtitle(context.getString(R.string.bio_verify))
             .setNegativeButtonText(context.getString(R.string.bio_cancel))
             .setAllowedAuthenticators(AUTHENTICATORS)
@@ -146,7 +146,7 @@ internal fun BiometricSessionGate(onSignOut: () -> Unit, onUnlocked: @Composable
         }
     } else {
         Column(modifier = Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("Tarkastus Cloud – " + androidx.compose.ui.res.stringResource(R.string.bio_title))
+            Text(androidx.compose.ui.res.stringResource(R.string.app_name) + " – " + androidx.compose.ui.res.stringResource(R.string.bio_title))
             if (error.isNotEmpty()) Text(error)
             Button(onClick = {
                 if (BiometricLock.available(context)) {
